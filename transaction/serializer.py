@@ -1,4 +1,3 @@
-from django.db.models import Sum
 from rest_framework import serializers
 
 from transaction import models as tran_models
@@ -8,7 +7,6 @@ class AccountSerializer(serializers.ModelSerializer):
     """
     Serializer for Account Object.
     """
-    summery = serializers.SerializerMethodField()
     initial_amount = serializers.FloatField(required=False)
 
     class Meta:
@@ -17,23 +15,6 @@ class AccountSerializer(serializers.ModelSerializer):
         """
         model = tran_models.Account
         fields = '__all__'
-
-    def get_summery(self, obj):
-        """
-        Function to get current balance and income, expense.
-        """
-        data = {
-            'balance': obj.balance,
-            'income': obj.income,
-            'expense': obj.expense
-        }
-
-        return data
-
-
-def aggregate(param):
-    pass
-
 
 class TransactionSerializer(serializers.ModelSerializer):
     """
@@ -66,5 +47,4 @@ class TransactionSerializer(serializers.ModelSerializer):
             'income': income_sum,
             'expense': expense_sum,
         }
-        print(data)
-        return True
+        return data
