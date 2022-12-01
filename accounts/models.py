@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser as DjangoAbstractUser
 from django.contrib.auth.models import BaseUserManager
 from django.utils.crypto import get_random_string
 
-from smart_tracker.library import get_file_path
+from smart_tracker.library import get_file_path, encode
 
 
 class CustomUserManager(BaseUserManager):
@@ -82,6 +82,11 @@ class ProjectUser(DjangoAbstractUser):
         self.save()
         return token.key
 
+    @property
+    def idencode(self):
+        """To return encoded id."""
+        return encode(self.id)
+
 
 class AccessToken(models.Model):
     """
@@ -119,3 +124,8 @@ class AccessToken(models.Model):
         """Function  to change token."""
         self.key = self.generate_unique_key()
         self.save()
+
+    @property
+    def idencode(self):
+        """To return encoded id."""
+        return encode(self.id)

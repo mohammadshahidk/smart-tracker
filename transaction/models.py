@@ -3,6 +3,9 @@ import datetime
 from django.db import models
 from accounts import models as user_model
 from django.db.models import Sum
+
+from smart_tracker.library import encode
+from smart_tracker.library import decode
 from transaction import constants as tran_constants
 
 
@@ -50,6 +53,11 @@ class Account(models.Model):
         return spend
 
     @property
+    def idencode(self):
+        """To return encoded id."""
+        return encode(self.id)
+
+    @property
     def balance(self):
         """ Returns users current balance."""
         return (self.initial_amount + self.income) - self.expense
@@ -80,6 +88,15 @@ class Transaction(models.Model):
     amount = models.FloatField(
         default=0.0, blank=True, null=True)
     comment = models.TextField(default='', null=True, blank=True)
+
+    def __str__(self):
+        """ Returns the account name on list of accounts"""
+        return self.idencode
+
+    @property
+    def idencode(self):
+        """To return encoded id."""
+        return encode(self.id)
 
 
 

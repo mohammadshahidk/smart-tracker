@@ -127,6 +127,9 @@ USE_TZ = True
 ACCESS_TOKEN_LENGTH = 90
 OTP_LENGTH = 6
 
+HASHHID_SALT = 'NRTZZJEDKDMRSPR'
+HASHID_MIN_LENGTH = 5
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 

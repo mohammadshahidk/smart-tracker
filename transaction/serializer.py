@@ -2,11 +2,14 @@ from rest_framework import serializers
 
 from transaction import models as tran_models
 
+from smart_tracker.fields import IdencodeField
+
 
 class AccountSerializer(serializers.ModelSerializer):
     """
     Serializer for Account Object.
     """
+    id = IdencodeField(read_only=True)
     initial_amount = serializers.FloatField(required=False)
 
     class Meta:
@@ -16,12 +19,16 @@ class AccountSerializer(serializers.ModelSerializer):
         model = tran_models.Account
         fields = '__all__'
 
+
 class TransactionSerializer(serializers.ModelSerializer):
     """
     Serializer for Transaction object.
     """
+    id = IdencodeField(read_only=True)
     comment = serializers.CharField(required=False)
     summery = serializers.SerializerMethodField()
+    account = IdencodeField(
+        serializer=AccountSerializer, related_model=tran_models.Account)
 
     class Meta:
         """Meta Info."""

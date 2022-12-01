@@ -6,12 +6,14 @@ from accounts import models as user_model
 
 from smart_tracker.exceptions import UnauthorizedAccess
 from smart_tracker.exceptions import BadRequest
+from smart_tracker.fields import IdencodeField
 
 
 class UserSerializer(serializers.ModelSerializer):
     """
     Serializer for Project user object.
     """
+    id = IdencodeField(read_only=True)
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
     password = serializers.CharField(write_only=True, required=False)
