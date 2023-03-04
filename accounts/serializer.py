@@ -31,6 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
             raise BadRequest('A User with this phone is already Exist')
         return value
 
+    @transaction.atomic()
     def create(self, validated_data):
         """
         Overriding the create method.
@@ -68,6 +69,37 @@ class LoginSerializer(serializers.Serializer):
         }
         return data
 
+
+class ResetPasswordSerializer(serializers.ModelSerializer):
+    """
+    Serializer to reset user password.
+    """
+    user = IdencodeField(
+        serializer=UserSerializer, related_model=user_model.ProjectUser)
+    old_password = serializers.CharField(required=True, write_only=True)
+    new_password = serializers.CharField(required=True, write_only=True)
+
+    class Meta:
+        """Meta info."""
+        model = user_model.ProjectUser
+        fields = ('user', 'old_password', 'new_password')
+
+    def update(self, instance, validated_data):
+        """Update password"""
+        if not instance.check_password(validated_data['old_password']):
+            raise BadRequest("Current password is incorrect")
+        instance.set_password(validated_data['new_password'])
+        instance.save()
+        return instance
+
+    def to_representation(self, instance):
+        """
+        Add return data after password reset.
+        """
+        data = {
+            "message": "Password reset Success!."
+        }
+        return data
 
     
 

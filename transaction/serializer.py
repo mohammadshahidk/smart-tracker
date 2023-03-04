@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from transaction import models as tran_models
+from accounts.serializer import UserSerializer
+from accounts.models import ProjectUser
 
 from smart_tracker.fields import IdencodeField
 
@@ -10,7 +12,10 @@ class AccountSerializer(serializers.ModelSerializer):
     Serializer for Account Object.
     """
     id = IdencodeField(read_only=True)
+    user = IdencodeField(
+        serializer=UserSerializer, related_model=ProjectUser)
     initial_amount = serializers.FloatField(required=False)
+    total_balance = serializers.FloatField(source='balance', read_only=True)
 
     class Meta:
         """
